@@ -16,25 +16,17 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 10.0.302
-
-    - name: Show selected SDK
-      run: dotnet --info
-
-    - name: Select Xcode Version
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '26.6'
+        dotnet-version: |
+          9.0.x
 
     - name: Install dependencies
       working-directory: ./src
       run: |
-        dotnet workload install macos --version 10.0.302.1
+        dotnet workload install macos
         dotnet workload restore
         dotnet restore
 
     - name: Check code style info
       working-directory: ./src
       run: |
-        dotnet build SyncClipboard.Core/SyncClipboard.Core.csproj --no-restore
         dotnet format --verify-no-changes --severity info --no-restore

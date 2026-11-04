@@ -11,10 +11,6 @@ jobs:
         dotnet_runtime: [self-contained, no-self-contained]
         win_app_sdk: ['win_app_sdk', 'no_win_app_sdk']
         include:
-          - cpu: x64
-            runner: windows-2025-vs2026
-          - cpu: arm64
-            runner: windows-11-arm
           - dotnet_runtime: 'self-contained'
             if_self: 'true'
             dotnet_runtime_filename: ''
@@ -28,7 +24,8 @@ jobs:
             if_app_sdk: 'false'
             win_app_sdk_filename: '_no-win-app-sdk'
 
-    runs-on: ${{ matrix.runner }}
+    runs-on: windows-2025-vs2026    # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     steps:
     - name: Checkout
@@ -38,10 +35,8 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 10.0.302
-
-    - name: Show selected SDK
-      run: dotnet --info
+        dotnet-version: |
+          9.0.x
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v3
@@ -65,7 +60,7 @@ jobs:
         /v:m -restore
 
     - name: copy SyncClipboard.WinUI3
-      run: xcopy src\SyncClipboard.WinUI3\bin\${{ matrix.cpu }}\Release\net10.0-windows10.0.19041.0\win-${{ matrix.cpu }} WinUI3\ /s /e
+      run: xcopy src\SyncClipboard.WinUI3\bin\${{ matrix.cpu }}\Release\net9.0-windows10.0.19041.0\win-${{ matrix.cpu }} WinUI3\ /s /e
 
     - name: set update info
       shell: bash

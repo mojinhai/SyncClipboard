@@ -22,7 +22,7 @@ jobs:
           - package-type: installer
             package-ext: .exe
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     needs: package
     steps:
       - name: Download last-job-built change log
